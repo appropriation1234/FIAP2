@@ -32,11 +32,9 @@ const servico = {
     categoria: categoria.value,
 }
 
-console.log(target);
 if(!validar(servico)){
     return
 }
-
 
 document.querySelector(".card-body").innerHTML += createCard(servico)
 
