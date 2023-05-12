@@ -49,7 +49,7 @@ function createCard(servico){
     const data = new Date();
     const cards = document.querySelectorAll(".card")
     return `
-    <div class="col-lg-3 col-md-6 col-12" id="card${cards.length}">
+    <div id="card${cards.length}">
     <div class="card">
         <div class="card-header">
             ${servico.cliente}
