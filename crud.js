@@ -1,60 +1,71 @@
 document.querySelector("#salvar").addEventListener("click", cadastrar)
 
-function cadastrar(){
-const cliente = document.querySelector("#cliente").value
-const descricao = document.querySelector("#descricao").value
-const categoria = document.querySelector("#categoria").value
+const categoria = 'Selecione a Categoria'
 
-const serviço = {
-    cliente: cliente,
-    descricao: descricao,
-    categoria: categoria,
-}
-function validar(valor, campo){
-if(serviço.cliente ==""){
-    document.querySelector("#cliente").classList.add("is-invalid")
-    document.querySelector("#cliente").classList.remove("is-valid")
-    return
-}else{
-    document.querySelector("#cliente").classList.remove("is-invalid")
-    document.querySelector("#cliente").classList.add("is-valid")
-
-    }
-}
-
-document.querySelector("#cliente").innerHTML += createCard(cliente)
-    
-}
-
-function validar(valor, campo){
-    if(valor.cliente ==""){
-        campo.classList.add("is-invalid")
-        campo.classList.remove("is-valid")
-        return false
-    }
+function validar(servico){
+    const keys = Object.keys(servico)
+    const arr = []
+    for(let key of keys){
+        const campo = document.querySelector(`#${key}`)
+        if(servico[key].length < 1 || servico[key] == categoria){
+            campo.classList.add("is-invalid")
+            campo.classList.remove("is-valid")
+            arr.push(false)
+            return
+        }
         campo.classList.remove("is-invalid")
         campo.classList.add("is-valid")
-        return true
-    
-        }
+        arr.push(true)
+    }
+    return arr.every((el) => el == true)
+    }
+
+function cadastrar({target}){
+const cliente = document.querySelector("#cliente")
+const descricao = document.querySelector("#descricao")
+const categoria = document.querySelector("#categoria")
+
+
+const servico = {
+    cliente: cliente.value,
+    descricao: descricao.value,
+    categoria: categoria.value,
+}
+
+console.log(target);
+if(!validar(servico)){
+    return
+}
+
+
+document.querySelector(".card-body").innerHTML += createCard(servico)
+
+}
     
 
-function createCard(serviço){
+function deleteService(card){
+    document.querySelector(`#card${card}`).remove()
+}
+
+function createCard(servico){
+    const data = new Date();
+    const cards = document.querySelectorAll(".card")
     return `
-    <div class="col-lg-3 col-md-6 col-12">
+    <div class="col-lg-3 col-md-6 col-12" id="card${cards.length}">
     <div class="card">
         <div class="card-header">
-            ${cliente}
+            ${servico.cliente}
         </div>
         <div class="card-body">
-            <p class="card-text">Terminar até ##:## - ##/##/####</p>
+            <p class="card-text">${data}</p>
+            <p class="card-text">Descrição: ${servico.descricao}</p>
             <p>
                 <span class="badge text-bg-warning">Pendente</span>
             </p>
             <a href="#" class="btn btn-success">
                 <i class="bi bi-check-lg"></i>
             </a>
-            <a href="#" class="btn btn-danger">
+            <a href="#" onclick="deleteService(${cards.length})" class="btn btn-danger">
                 <i class="bi bi-trash"></i>
             </a>
         </div>
@@ -62,3 +73,4 @@ function createCard(serviço){
 </div> <!-- col -->
     ` //template literals
 }
+
